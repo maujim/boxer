@@ -21,6 +21,7 @@ from loaders.omni_loader import OMNI3D_DATASETS, OmniLoader
 from loaders.scannet_loader import ScanNetLoader
 from utils.demo_utils import (
     CKPT_PATH,
+    DEFAULT_BOXERNET_CKPT,
     DEFAULT_SEQ,
     EVAL_PATH,
     SAMPLE_DATA_PATH,
@@ -110,7 +111,7 @@ def main():
     parser.add_argument("--gt2d", action="store_true", help="use GT pseudo 2DBB as input")
     parser.add_argument("--fuse", action="store_true", help="run offline 3D box fusion after processing")
     parser.add_argument("--track", action="store_true", help="run online 3D box tracking and show tracked boxes in Top Down View")
-    parser.add_argument("--ckpt", type=str, default=os.path.join(CKPT_PATH, "boxernet_hw960in4x6d768-wssxpf9p.ckpt"), help="path to BoxerNet checkpoint")
+    parser.add_argument("--ckpt", type=str, default=os.path.join(CKPT_PATH, DEFAULT_BOXERNET_CKPT), help="path to BoxerNet checkpoint")
     parser.add_argument("--force_precision", type=str, default=None, choices=["float32", "bfloat16"], help="Override auto-detected inference precision")
     parser.add_argument("--output_dir", type=str, default=EVAL_PATH, help="Output directory for results (default: output/)")
     args = parser.parse_args()
@@ -244,7 +245,7 @@ def main():
             with_obb=args.gt2d,
             pinhole=args.pinhole,
             resize=None,
-            unrotate=False,
+            unrotate=True,
             skip_n=args.skip_n,
             max_n=args.max_n,
             start_n=args.start_n,
